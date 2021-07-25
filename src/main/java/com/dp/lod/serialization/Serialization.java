@@ -5,14 +5,14 @@ public class Serialization implements Serializable,Deserializable{
 
     @Override
     public String serialize(Object object) {
-        String serializedResult = ...;
+        String serializedResult = "";
         //...
         return serializedResult;
     }
 
     @Override
     public Object deserialize(String str) {
-        Object deserializedResult = ...;
+        Object deserializedResult = null;
         //...
         return deserializedResult;
     }
