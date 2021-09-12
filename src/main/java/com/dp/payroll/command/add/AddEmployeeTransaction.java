@@ -10,15 +10,18 @@ import com.dp.payroll.paymentschedule.PaymentSchedule;
 
 public abstract class AddEmployeeTransaction implements Transaction {
 
-    PayrollDatabase gPayrollDatabase;
+    private PayrollDatabase gPayrollDatabase = PayrollDatabase.getpayRollDBInstance();
 
 
     private int empId;
     private String name;
     private String address;
 
+    public AddEmployeeTransaction(){
+
+    }
+
     public AddEmployeeTransaction(int empId, String name, String address) {
-        gPayrollDatabase = new PayrollDatabase();
         setEmpId(empId);
         setName(name);
         setAddress(address);

@@ -2,6 +2,9 @@ package com.dp.payroll.paymentclassification;
 
 public class SalariedClassification implements PaymentClassification {
 
+    /**
+     * 每月工资
+     */
     private double salary;
 
     public SalariedClassification(double salary) {
