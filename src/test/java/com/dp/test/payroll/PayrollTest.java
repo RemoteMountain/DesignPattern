@@ -1,11 +1,12 @@
 package com.dp.test.payroll;
 
 import com.dp.payroll.Employee;
-import com.dp.payroll.command.TimeCardTransaction;
+import com.dp.payroll.command.SalesReceiptTransaction;
 import com.dp.payroll.command.add.AddCommissionedEmployee;
 import com.dp.payroll.command.add.AddHourlyEmployee;
 import com.dp.payroll.command.add.AddSalariedEmployee;
 import com.dp.payroll.command.delete.DeleteEmployeeTransaction;
+import com.dp.payroll.command.timecard.TimeCardTransaction;
 import com.dp.payroll.database.PayrollDatabase;
 import com.dp.payroll.paymentclassification.*;
 import com.dp.payroll.paymentmethod.HoldMethod;
@@ -14,11 +15,7 @@ import com.dp.payroll.paymentschedule.BiweeklySchedule;
 import com.dp.payroll.paymentschedule.MonthlySchedule;
 import com.dp.payroll.paymentschedule.PaymentSchedule;
 import com.dp.payroll.paymentschedule.WeeklySchedule;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.Date;
 
 import static org.junit.Assert.*;
 
@@ -111,13 +108,15 @@ public class PayrollTest {
     }
 
     @Test
-    public void testTimeCardTransaction(){
+    public void testTimeCardTransaction() {
         int empId = 2;
-        Date date = new Date("2021-09-11");
+        /*Date date = new Date();
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");*/
+
         AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
         t.execute();
 
-        TimeCardTransaction tct = new TimeCardTransaction(date.getTime(), 8.0, empId);
+        TimeCardTransaction tct = new TimeCardTransaction("2021-09-13", 8.0, empId);
         tct.execute();
 
         PayrollDatabase gPayrollDatabase = t.getPayrollDatabase();
@@ -127,8 +126,32 @@ public class PayrollTest {
         HourlyClassification hc = (HourlyClassification) e.getClassification();
         assertNotNull(hc);
 
-        TimeCard tc = hc.getTimeCard(date.getTime());
+        TimeCard tc = hc.getTimeCard("2021-09-13");
         assertNotNull(tc);
-        assertEquals(8.0,tc.getHours());
+        assertEquals(8.0, tc.getHours(), 10);
     }
+
+    @Test
+    public void testSalesReceiptTransaction() {
+        int empId = 3;
+        AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Bob", "Home", 2500, 3.2);
+        t.execute();
+
+        SalesReceiptTransaction srt = new SalesReceiptTransaction(8.0, empId);
+        srt.execute();
+
+        PayrollDatabase gPayrollDatabase = t.getPayrollDatabase();
+        Employee e = gPayrollDatabase.getEmployee(empId);
+        assertNotNull(e);
+
+        CommissionedClassification cc = (CommissionedClassification) e.getClassification();
+        assertNotNull(cc);
+
+        SalesReceipt sr = cc.getSalesReceipt(8.0);
+        assertNotNull(sr);
+        assertEquals(8.0, sr.getSales(), 10);
+
+
+    }
+
 }

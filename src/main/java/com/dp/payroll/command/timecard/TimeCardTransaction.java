@@ -1,21 +1,22 @@
-package com.dp.payroll.command;
+package com.dp.payroll.command.timecard;
 
 import com.dp.payroll.Employee;
+import com.dp.payroll.command.Transaction;
 import com.dp.payroll.database.PayrollDatabase;
 import com.dp.payroll.paymentclassification.HourlyClassification;
 import com.dp.payroll.paymentclassification.TimeCard;
 
 import java.util.Date;
 
-public class TimeCardTransaction implements Transaction{
+public class TimeCardTransaction implements Transaction {
 
     private PayrollDatabase gPayrollDatabase = PayrollDatabase.getpayRollDBInstance();
 
-    private Date date;
+    private String date;
     private double hours;
     private int empId;
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -30,8 +31,8 @@ public class TimeCardTransaction implements Transaction{
     public TimeCardTransaction() {
     }
 
-    public TimeCardTransaction(long date, double hours, int empId) {
-        setDate(new Date(date));
+    public TimeCardTransaction(String date, double hours, int empId) {
+        setDate(date);
         setHours(hours);
         setEmpId(empId);
     }
@@ -42,7 +43,7 @@ public class TimeCardTransaction implements Transaction{
         if (e != null){
             HourlyClassification hc = (HourlyClassification)e.getClassification();
             if (hc != null){
-                hc.addTimeCard(new TimeCard(date.getTime(),hours));
+                hc.addTimeCard(new TimeCard(date,hours));
 
             }else {
                 throw new RuntimeException("Tired to add timecard to non-hourly employee.");

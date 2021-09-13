@@ -16,9 +16,9 @@ public class HourlyClassification implements PaymentClassification {
         return timeCards;
     }
 
-    public TimeCard getTimeCard(long date){
+    public TimeCard getTimeCard(String date){
         for (TimeCard tc: timeCards) {
-            if (tc.getDate().getTime() == date){
+            if (tc.getDate().equals(date)){
                 return tc;
             }
         }

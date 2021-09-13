@@ -7,6 +7,10 @@ public class SalariedClassification implements PaymentClassification {
      */
     private double salary;
 
+    public SalariedClassification(){
+
+    }
+
     public SalariedClassification(double salary) {
         setSalary(salary);
     }

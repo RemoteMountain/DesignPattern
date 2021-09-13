@@ -13,7 +13,6 @@ public class AddCommissionedEmployee extends AddEmployeeTransaction{
 
     private double salary;
     private double commissionRate;
-    private List<SalesReceipt> salesReceipts = new ArrayList<>();
 
     public void setSales(double commissionRate) {
         this.commissionRate = commissionRate;
@@ -21,14 +20,6 @@ public class AddCommissionedEmployee extends AddEmployeeTransaction{
 
     public void setSalary(double salary) {
         this.salary = salary;
-    }
-
-    public List<SalesReceipt> getSalesReceipts() {
-        return salesReceipts;
-    }
-
-    public void addSalesReceipt(SalesReceipt salesReceipt){
-        salesReceipts.add(salesReceipt);
     }
 
     public AddCommissionedEmployee(int empId, String name, String address, double salary, double commissionRate) {
@@ -39,7 +30,7 @@ public class AddCommissionedEmployee extends AddEmployeeTransaction{
 
     @Override
     public PaymentClassification getClassification() {
-        return new CommissionedClassification(commissionRate);
+        return new CommissionedClassification(salary,commissionRate);
     }
 
     @Override

@@ -12,19 +12,12 @@ import java.util.List;
 public class AddHourlyEmployee extends AddEmployeeTransaction{
 
     private double hourRate;
-    private List<TimeCard> timeCards = new ArrayList<>();
 
     public void setHourRate(double hourRate) {
         this.hourRate = hourRate;
     }
 
-    public List<TimeCard> getTimeCards() {
-        return timeCards;
-    }
 
-    public void addTimeCard(TimeCard timeCard){
-        timeCards.add(timeCard);
-    }
 
     public AddHourlyEmployee(int empId, String name, String address, double hourRate) {
         super(empId, name, address);
