@@ -6,7 +6,6 @@ import com.dp.payroll.database.PayrollDatabase;
 import com.dp.payroll.paymentclassification.HourlyClassification;
 import com.dp.payroll.paymentclassification.TimeCard;
 
-import java.util.Date;
 
 public class TimeCardTransaction implements Transaction {
 

@@ -17,10 +17,6 @@ public abstract class AddEmployeeTransaction implements Transaction {
     private String name;
     private String address;
 
-    public AddEmployeeTransaction(){
-
-    }
-
     public AddEmployeeTransaction(int empId, String name, String address) {
         setEmpId(empId);
         setName(name);

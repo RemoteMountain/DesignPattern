@@ -1,11 +1,17 @@
 package com.dp.test.payroll;
 
 import com.dp.payroll.Employee;
-import com.dp.payroll.command.SalesReceiptTransaction;
+import com.dp.payroll.affiliation.ServiceCharge;
+import com.dp.payroll.affiliation.UnionAffiliation;
 import com.dp.payroll.command.add.AddCommissionedEmployee;
 import com.dp.payroll.command.add.AddHourlyEmployee;
 import com.dp.payroll.command.add.AddSalariedEmployee;
+import com.dp.payroll.command.change.ChangeAddressEmploueeTransaction;
+import com.dp.payroll.command.change.ChangeHourlyTransaction;
+import com.dp.payroll.command.change.ChangeNameEmploueeTransaction;
 import com.dp.payroll.command.delete.DeleteEmployeeTransaction;
+import com.dp.payroll.command.salesreceipt.SalesReceiptTransaction;
+import com.dp.payroll.command.servicecharge.ServiceChargeTransaction;
 import com.dp.payroll.command.timecard.TimeCardTransaction;
 import com.dp.payroll.database.PayrollDatabase;
 import com.dp.payroll.paymentclassification.*;
@@ -20,6 +26,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class PayrollTest {
+
+    PayrollDatabase gPayrollDatabase = PayrollDatabase.getpayRollDBInstance();
 
     @Test
     public void testAddSalariedEmployee() {
@@ -150,8 +158,80 @@ public class PayrollTest {
         SalesReceipt sr = cc.getSalesReceipt(8.0);
         assertNotNull(sr);
         assertEquals(8.0, sr.getSales(), 10);
+    }
+
+    @Test
+    public void testAddServiceCharge() {
+        int empId = 2;
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Cici", "Home", 10.00);
+        t.execute();
+
+        PayrollDatabase gPayrollDatabase = t.getPayrollDatabase();
+        Employee e = gPayrollDatabase.getEmployee(empId);
+
+        int memberId = 1;
+        UnionAffiliation af = new UnionAffiliation(memberId, 12.95);
+        e.setAffiliation(af);
+
+        gPayrollDatabase.addUnionMember(memberId, e);
+
+        ServiceChargeTransaction sct = new ServiceChargeTransaction(memberId, 20210930, 12.95);
+        sct.execute();
+        ServiceCharge sc = af.getServiceCharge(20210930);
+        assertEquals(12.95, sc.getAmount(), 10);
+
+    }
+
+    @Test
+    public void testChangeName(){
+        int empId = 2;
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Cici", "Home", 10.00);
+        t.execute();
+
+        ChangeNameEmploueeTransaction cnt = new ChangeNameEmploueeTransaction(empId,"Bob");
+        cnt.execute();
+
+        Employee e = gPayrollDatabase.getEmployee(empId);
+        assertNotNull(e);
+        assertEquals("Bob",e.getName());
+    }
+
+    @Test
+    public void testChangeAddress(){
+        int empId = 2;
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Cici", "Home", 10.00);
+        t.execute();
+
+        ChangeAddressEmploueeTransaction cat = new ChangeAddressEmploueeTransaction(empId,"NetBar");
+        cat.execute();
+
+        Employee e = gPayrollDatabase.getEmployee(empId);
+        assertNotNull(e);
+        assertEquals("NetBar",e.getAddress());
+    }
+
+    @Test
+    public void testChangeHourlyTransaction(){
+        int empId = 2;
+        AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Wawa", "Home", 2500, 10.00);
+        t.execute();
+
+        ChangeHourlyTransaction cht = new ChangeHourlyTransaction(empId,27.52);
+        cht.execute();
+
+        Employee e = gPayrollDatabase.getEmployee(empId);
+        assertNotNull(e);
+
+        HourlyClassification hc = (HourlyClassification)e.getClassification();
+        assertNotNull(hc);
+
+        assertEquals(27.52,hc.getHourRate(),10);
+
+        WeeklySchedule ws = (WeeklySchedule) e.getSchedule();
+        assertNotNull(ws);
 
 
     }
+
 
 }

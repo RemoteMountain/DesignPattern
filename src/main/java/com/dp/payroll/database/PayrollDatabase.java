@@ -8,10 +8,12 @@ import java.util.Map;
 public class PayrollDatabase {
 
     private Map<Integer, Employee> itsEmployees;
+    private Map<Integer,Employee> itsMembers;
     private static PayrollDatabase gPayrollDatabase;
 
     private PayrollDatabase(){
         itsEmployees = new HashMap<>();
+        itsMembers = new HashMap<>();
     }
 
     public static PayrollDatabase getpayRollDBInstance(){
@@ -36,5 +38,13 @@ public class PayrollDatabase {
     }
     public void clear(){
         itsEmployees.clear();
+    }
+
+    public Employee getUnionMember(int memberId) {
+        return itsMembers.get(memberId);
+    }
+
+    public void addUnionMember(int memberId, Employee e) {
+        itsMembers.put(memberId,e);
     }
 }

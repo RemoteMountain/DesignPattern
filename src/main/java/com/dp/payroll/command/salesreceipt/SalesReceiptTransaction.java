@@ -1,11 +1,12 @@
-package com.dp.payroll.command;
+package com.dp.payroll.command.salesreceipt;
 
 import com.dp.payroll.Employee;
+import com.dp.payroll.command.Transaction;
 import com.dp.payroll.database.PayrollDatabase;
 import com.dp.payroll.paymentclassification.CommissionedClassification;
 import com.dp.payroll.paymentclassification.SalesReceipt;
 
-public class SalesReceiptTransaction implements Transaction{
+public class SalesReceiptTransaction implements Transaction {
 
     private PayrollDatabase gPayrollDatabase = PayrollDatabase.getpayRollDBInstance();
 

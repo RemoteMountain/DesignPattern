@@ -2,12 +2,8 @@ package com.dp.payroll.command.add;
 
 import com.dp.payroll.paymentclassification.HourlyClassification;
 import com.dp.payroll.paymentclassification.PaymentClassification;
-import com.dp.payroll.paymentclassification.TimeCard;
 import com.dp.payroll.paymentschedule.PaymentSchedule;
 import com.dp.payroll.paymentschedule.WeeklySchedule;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AddHourlyEmployee extends AddEmployeeTransaction{
 
