@@ -1,6 +1,7 @@
 package com.dp.test.payroll;
 
 import com.dp.payroll.Employee;
+import com.dp.payroll.Paycheck;
 import com.dp.payroll.affiliation.ServiceCharge;
 import com.dp.payroll.affiliation.UnionAffiliation;
 import com.dp.payroll.command.add.AddCommissionedEmployee;
@@ -8,8 +9,10 @@ import com.dp.payroll.command.add.AddHourlyEmployee;
 import com.dp.payroll.command.add.AddSalariedEmployee;
 import com.dp.payroll.command.change.ChangeAddressEmploueeTransaction;
 import com.dp.payroll.command.change.ChangeHourlyTransaction;
+import com.dp.payroll.command.change.ChangeMemberTransaction;
 import com.dp.payroll.command.change.ChangeNameEmploueeTransaction;
 import com.dp.payroll.command.delete.DeleteEmployeeTransaction;
+import com.dp.payroll.command.pay.PaydayTransaction;
 import com.dp.payroll.command.salesreceipt.SalesReceiptTransaction;
 import com.dp.payroll.command.servicecharge.ServiceChargeTransaction;
 import com.dp.payroll.command.timecard.TimeCardTransaction;
@@ -22,6 +25,10 @@ import com.dp.payroll.paymentschedule.MonthlySchedule;
 import com.dp.payroll.paymentschedule.PaymentSchedule;
 import com.dp.payroll.paymentschedule.WeeklySchedule;
 import org.junit.Test;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static org.junit.Assert.*;
 
@@ -118,13 +125,12 @@ public class PayrollTest {
     @Test
     public void testTimeCardTransaction() {
         int empId = 2;
-        /*Date date = new Date();
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");*/
 
         AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
         t.execute();
 
-        TimeCardTransaction tct = new TimeCardTransaction("2021-09-13", 8.0, empId);
+        Date payDate = new Date(2021, 11, 12);
+        TimeCardTransaction tct = new TimeCardTransaction(payDate, 8.0, empId);
         tct.execute();
 
         PayrollDatabase gPayrollDatabase = t.getPayrollDatabase();
@@ -134,7 +140,7 @@ public class PayrollTest {
         HourlyClassification hc = (HourlyClassification) e.getClassification();
         assertNotNull(hc);
 
-        TimeCard tc = hc.getTimeCard("2021-09-13");
+        TimeCard tc = hc.getTimeCard(payDate);
         assertNotNull(tc);
         assertEquals(8.0, tc.getHours(), 10);
     }
@@ -161,7 +167,7 @@ public class PayrollTest {
     }
 
     @Test
-    public void testAddServiceCharge() {
+    public void testAddServiceCharge() throws ParseException {
         int empId = 2;
         AddHourlyEmployee t = new AddHourlyEmployee(empId, "Cici", "Home", 10.00);
         t.execute();
@@ -175,62 +181,228 @@ public class PayrollTest {
 
         gPayrollDatabase.addUnionMember(memberId, e);
 
-        ServiceChargeTransaction sct = new ServiceChargeTransaction(memberId, 20210930, 12.95);
+        Date date = new SimpleDateFormat("yyyy-MM-dd").parse("2021-11-12");
+        ServiceChargeTransaction sct = new ServiceChargeTransaction(memberId, date, 12.95);
         sct.execute();
-        ServiceCharge sc = af.getServiceCharge(20210930);
+
+        ServiceCharge sc = af.getServiceCharge(date);
         assertEquals(12.95, sc.getAmount(), 10);
 
     }
 
     @Test
-    public void testChangeName(){
+    public void testChangeName() {
         int empId = 2;
         AddHourlyEmployee t = new AddHourlyEmployee(empId, "Cici", "Home", 10.00);
         t.execute();
 
-        ChangeNameEmploueeTransaction cnt = new ChangeNameEmploueeTransaction(empId,"Bob");
+        ChangeNameEmploueeTransaction cnt = new ChangeNameEmploueeTransaction(empId, "Bob");
         cnt.execute();
 
         Employee e = gPayrollDatabase.getEmployee(empId);
         assertNotNull(e);
-        assertEquals("Bob",e.getName());
+        assertEquals("Bob", e.getName());
     }
 
     @Test
-    public void testChangeAddress(){
+    public void testChangeAddress() {
         int empId = 2;
         AddHourlyEmployee t = new AddHourlyEmployee(empId, "Cici", "Home", 10.00);
         t.execute();
 
-        ChangeAddressEmploueeTransaction cat = new ChangeAddressEmploueeTransaction(empId,"NetBar");
+        ChangeAddressEmploueeTransaction cat = new ChangeAddressEmploueeTransaction(empId, "NetBar");
         cat.execute();
 
         Employee e = gPayrollDatabase.getEmployee(empId);
         assertNotNull(e);
-        assertEquals("NetBar",e.getAddress());
+        assertEquals("NetBar", e.getAddress());
     }
 
     @Test
-    public void testChangeHourlyTransaction(){
+    public void testChangeHourlyTransaction() {
         int empId = 2;
         AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Wawa", "Home", 2500, 10.00);
         t.execute();
 
-        ChangeHourlyTransaction cht = new ChangeHourlyTransaction(empId,27.52);
+        ChangeHourlyTransaction cht = new ChangeHourlyTransaction(empId, 27.52);
         cht.execute();
 
         Employee e = gPayrollDatabase.getEmployee(empId);
         assertNotNull(e);
 
-        HourlyClassification hc = (HourlyClassification)e.getClassification();
+        HourlyClassification hc = (HourlyClassification) e.getClassification();
         assertNotNull(hc);
 
-        assertEquals(27.52,hc.getHourRate(),10);
+        assertEquals(27.52, hc.getHourRate(), 10);
 
         WeeklySchedule ws = (WeeklySchedule) e.getSchedule();
         assertNotNull(ws);
 
 
+    }
+
+    @Test
+    public void testPaySingleSalariedEmployee() throws ParseException {
+        int empId = 2;
+        AddSalariedEmployee t = new AddSalariedEmployee(empId, "Bob", "Home", 1000.00);
+        t.execute();
+
+        Date payDate = new SimpleDateFormat("yyyy-MM-dd").parse("2021-11-30");
+
+        PaydayTransaction pt = new PaydayTransaction(payDate);
+        pt.execute();
+
+        Paycheck pc = pt.getPayCheck(empId);
+        assertNotNull(pc);
+        assertTrue(payDate == pc.getPayDate());
+        assertEquals(1000.00, pc.getGrossPay(), 10);
+        assertTrue("Hold" == pc.getField("Disposition"));
+        assertEquals(0.0, pc.getDeductions(), 10);
+        assertEquals(1000.00, pc.getNetpay(), 10);
+    }
+
+    @Test
+    public void testPaySingleSalariedEmployeeOnWrongDate() throws ParseException {
+        int empId = 2;
+        AddSalariedEmployee t = new AddSalariedEmployee(empId, "Bob", "Home", 1000.00);
+        t.execute();
+
+        Date payDate = new SimpleDateFormat("yyyy-MM-dd").parse("2021-11-29");
+
+        PaydayTransaction pt = new PaydayTransaction(payDate);
+        pt.execute();
+
+        Paycheck pc = pt.getPayCheck(empId);
+        assertNull(pc);
+    }
+
+    @Test
+    public void testPaySingleHourlyEmployeeNoTimeCards() throws ParseException {
+        int empId = 2;
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Cici", "Home", 10.00);
+        t.execute();
+
+        Date payDate = new SimpleDateFormat("yyyy-MM-dd").parse("2021-11-12");
+        PaydayTransaction pt = new PaydayTransaction(payDate);
+        pt.execute();
+        validatePaycheck(pt, empId, payDate, 0.0);
+    }
+
+    private void validatePaycheck(PaydayTransaction pt, int empId, Date payDate, double pay) {
+        Paycheck pc = pt.getPayCheck(empId);
+        assertNotNull(pc);
+        assertTrue(pc.getPayPeriodEndDate() == payDate);
+        assertTrue("Hold" == pc.getField("Disposition"));
+        assertEquals(0.0, pc.getDeductions(), 10);
+        assertEquals(pay, pc.getNetpay(), 10);
+    }
+
+    @Test
+    public void testPaySingleHourlyEmployeeOneTimeCard() throws ParseException {
+        int empId = 2;
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Cici", "Home", 15.25);
+        t.execute();
+
+        Date payDate = new SimpleDateFormat("yyyy-MM-dd").parse("2021-11-12");
+        TimeCardTransaction tct = new TimeCardTransaction(payDate, 2.0, empId);
+        tct.execute();
+
+        PaydayTransaction pt = new PaydayTransaction(payDate);
+        pt.execute();
+        validatePaycheck(pt, empId, payDate, 30.5);
+
+    }
+
+    @Test
+    public void testPaySingleHourlyEmployeeOvertimeTimeCard() throws ParseException {
+        int empId = 2;
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Cici", "Home", 15.25);
+        t.execute();
+
+        Date payDate = new SimpleDateFormat("yyyy-MM-dd").parse("2021-11-12");
+
+        TimeCardTransaction tct = new TimeCardTransaction(payDate, 9.0, empId);
+        tct.execute();
+
+        PaydayTransaction pt = new PaydayTransaction(payDate);
+        pt.execute();
+        validatePaycheck(pt, empId, payDate, 30.5);
+
+    }
+
+    @Test
+    public void testSingleHourlyEmployeeOnWrongDate() throws ParseException {
+        int empId = 2;
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Cici", "Home", 15.25);
+        t.execute();
+
+        Date payDate = new SimpleDateFormat("yyyy-MM-dd").parse("2021-11-12");
+
+        TimeCardTransaction tct = new TimeCardTransaction(payDate, 9.0, empId);
+        tct.execute();
+
+        PaydayTransaction pt = new PaydayTransaction(payDate);
+        pt.execute();
+
+        Paycheck pc = pt.getPayCheck(empId);
+        assertNull(pc);
+    }
+
+    @Test
+    public void testSingleHourlyEmployeeTwoTimeCards() throws ParseException {
+        int empId = 2;
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Cici", "Home", 15.25);
+        t.execute();
+
+        Date payDate = new SimpleDateFormat("yyyy-MM-dd").parse("2021-11-12");
+
+        TimeCardTransaction tct = new TimeCardTransaction(payDate, 2.0, empId);
+        tct.execute();
+
+        TimeCardTransaction tct2 = new TimeCardTransaction(new SimpleDateFormat("yyyy-MM-dd").parse("2021-11-11"), 5.0, empId);
+        tct2.execute();
+
+        PaydayTransaction pt = new PaydayTransaction(payDate);
+        pt.execute();
+
+        validatePaycheck(pt, empId, payDate, 7 * 15.25);
+    }
+
+    @Test
+    public void testSingleHourlyEmployeeWithTimeCardsSpanningTwoPayPeriods() throws ParseException {
+        int empId = 2;
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Cici", "Home", 15.25);
+        t.execute();
+
+        Date payDate = new SimpleDateFormat("yyyy-MM-dd").parse("2021-11-12");
+
+        TimeCardTransaction tct = new TimeCardTransaction(payDate, 2.0, empId);
+        tct.execute();
+
+        TimeCardTransaction tct2 = new TimeCardTransaction(new SimpleDateFormat("yyyy-MM-dd").parse("2021-11-5"), 5.0, empId);
+        tct2.execute();
+
+        PaydayTransaction pt = new PaydayTransaction(payDate);
+        pt.execute();
+
+        validatePaycheck(pt, empId, payDate, 2 * 15.25);
+    }
+
+    @Test
+    public void testSalariedUnionMemberDues() throws ParseException {
+        int empId = 1;
+        AddSalariedEmployee t = new AddSalariedEmployee(empId, "Bob", "Home", 1000.00);
+        t.execute();
+
+        int memberId = 7734;
+        ChangeMemberTransaction cmt = new ChangeMemberTransaction(empId, memberId, 9.42);
+        cmt.execute();
+
+        Date payDate = new SimpleDateFormat("yyyy-MM-dd").parse("2021-11-30");
+        PaydayTransaction pt = new PaydayTransaction(payDate);
+        pt.execute();
+
+        validatePaycheck(pt, empId, payDate, 1000.00);
     }
 
 

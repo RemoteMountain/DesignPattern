@@ -6,16 +6,18 @@ import com.dp.payroll.database.PayrollDatabase;
 import com.dp.payroll.paymentclassification.HourlyClassification;
 import com.dp.payroll.paymentclassification.TimeCard;
 
+import java.util.Date;
+
 
 public class TimeCardTransaction implements Transaction {
 
     private PayrollDatabase gPayrollDatabase = PayrollDatabase.getpayRollDBInstance();
 
-    private String date;
+    private Date date;
     private double hours;
     private int empId;
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -30,7 +32,7 @@ public class TimeCardTransaction implements Transaction {
     public TimeCardTransaction() {
     }
 
-    public TimeCardTransaction(String date, double hours, int empId) {
+    public TimeCardTransaction(Date date, double hours, int empId) {
         setDate(date);
         setHours(hours);
         setEmpId(empId);

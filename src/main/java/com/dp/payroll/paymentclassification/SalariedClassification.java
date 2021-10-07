@@ -1,5 +1,7 @@
 package com.dp.payroll.paymentclassification;
 
+import com.dp.payroll.Paycheck;
+
 public class SalariedClassification implements PaymentClassification {
 
     /**
@@ -21,5 +23,10 @@ public class SalariedClassification implements PaymentClassification {
 
     public double getSalary() {
         return this.salary;
+    }
+
+    @Override
+    public double calculatePay(Paycheck pc) {
+        return 0;
     }
 }

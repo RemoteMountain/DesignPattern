@@ -6,14 +6,16 @@ import com.dp.payroll.affiliation.UnionAffiliation;
 import com.dp.payroll.command.Transaction;
 import com.dp.payroll.database.PayrollDatabase;
 
+import java.util.Date;
+
 public class ServiceChargeTransaction implements Transaction {
     private int memberId;
-    private long date;
+    private Date date;
     private double charge;
 
     private PayrollDatabase gPayrollDatabase = PayrollDatabase.getpayRollDBInstance();
 
-    public ServiceChargeTransaction(int memberId, long date, double charge) {
+    public ServiceChargeTransaction(int memberId, Date date, double charge) {
         setMemberId(memberId);
         setDate(date);
         setCharge(charge);
@@ -35,11 +37,11 @@ public class ServiceChargeTransaction implements Transaction {
         this.memberId = memberId;
     }
 
-    public long getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(long date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

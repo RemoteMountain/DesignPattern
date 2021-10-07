@@ -4,14 +4,14 @@ import java.util.Date;
 
 public class TimeCard {
 
-    private String date;
+    private Date date;
     private double hours;
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
@@ -23,7 +23,7 @@ public class TimeCard {
         return hours;
     }
 
-    public TimeCard(String date, double hour) {
+    public TimeCard(Date date, double hour) {
         setDate(date);
         setHours(hour);
     }

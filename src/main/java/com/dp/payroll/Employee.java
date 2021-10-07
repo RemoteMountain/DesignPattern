@@ -5,12 +5,15 @@ import com.dp.payroll.paymentclassification.PaymentClassification;
 import com.dp.payroll.paymentmethod.PaymentMethod;
 import com.dp.payroll.paymentschedule.PaymentSchedule;
 
+import java.util.Date;
+
 public class Employee {
-    
+
     private int empId;
     private String name;
     private String address;
     private Affiliation affiliation;
+    private Paycheck payday;
 
 
     private PaymentClassification classification;
@@ -23,8 +26,20 @@ public class Employee {
         setAddress(address);
     }
 
+    public int getEmpId() {
+        return empId;
+    }
+
     public void setAffiliation(Affiliation affiliation) {
         this.affiliation = affiliation;
+    }
+
+    public Paycheck getPayday() {
+        return payday;
+    }
+
+    public void setPayday(Paycheck payday) {
+        this.payday = payday;
     }
 
     public Affiliation getAffiliation() {
@@ -73,5 +88,19 @@ public class Employee {
 
     public String getAddress() {
         return address;
+    }
+
+    public boolean isPayDate(Date payDate) {
+        return schedule.isPayDate(payDate);
+    }
+
+    public void payDay(Paycheck pc){
+        double grossPay = classification.calculatePay(pc);
+        double deductions = affiliation.calculateDeductions(pc);
+        double netPay = grossPay - deductions;
+        pc.setGrossPay(grossPay);
+        pc.setDeductions(deductions);
+        pc.setNetPay(netPay);
+        method.pay(pc);
     }
 }

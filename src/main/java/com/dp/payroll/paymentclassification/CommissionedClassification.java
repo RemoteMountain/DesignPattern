@@ -1,6 +1,8 @@
 package com.dp.payroll.paymentclassification;
 
 
+import com.dp.payroll.Paycheck;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,5 +47,10 @@ public class CommissionedClassification implements PaymentClassification {
             }
         }
         return null;
+    }
+
+    @Override
+    public double calculatePay(Paycheck pc) {
+        return 0;
     }
 }
