@@ -3,17 +3,16 @@ package com.dp.payroll;
 import java.util.Date;
 
 public class Paycheck {
-    private Date payDate;
     private double grossPay;
     private double deductions;
     private double netPay;
     private String field;
-    private Date payPeriodEndDate;
+    private Date payPeriodStartDate;
+    private Date payDate;
 
     public Date getPayDate() {
         return payDate;
     }
-
 
     public void setGrossPay(double grossPay) {
         this.grossPay = grossPay;
@@ -39,10 +38,6 @@ public class Paycheck {
         this.payDate = payDate;
     }
 
-    public Paycheck(Date payDate) {
-        setPayDate(payDate);
-    }
-
     public double getGrossPay() {
         return 0;
     }
@@ -51,11 +46,22 @@ public class Paycheck {
         return "Hold";
     }
 
-    public Date getPayPeriodEndDate() {
-        return payPeriodEndDate;
+    public Date getPayPeriodStartDate() {
+        return payPeriodStartDate;
     }
 
-    public void setPayPeriodEndDate(Date payPeriodEndDate) {
-        this.payPeriodEndDate = payPeriodEndDate;
+    public void setPayPeriodStartDate(Date payPeriodStartDate) {
+        this.payPeriodStartDate = payPeriodStartDate;
     }
+
+    public Date getPayPeriodEndDate() {
+        return payDate;
+    }
+
+    public Paycheck(Date payPeriodStartDate, Date payDate) {
+        setPayPeriodStartDate(payPeriodStartDate);
+        setPayDate(payDate);
+    }
+
+
 }

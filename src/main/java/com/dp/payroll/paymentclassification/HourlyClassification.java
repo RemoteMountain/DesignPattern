@@ -7,9 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.dp.payroll.util.DateUtils.isInRange;
-
-public class HourlyClassification implements PaymentClassification {
+public class HourlyClassification extends PaymentClassification {
 
     /**
      * 每小时工资
@@ -49,9 +47,8 @@ public class HourlyClassification implements PaymentClassification {
     @Override
     public double calculatePay(Paycheck pc) {
         double res = 0;
-        Date payPeriod = pc.getPayDate();
         for (TimeCard tc : timeCards) {
-            if (isInPayPeriod(tc, payPeriod)) {
+            if (DateUtils.isInPayPeriod(tc.getDate(), pc.getPayPeriodStartDate(),pc.getPayPeriodEndDate())) {
                 res += calculatePayForTimeCard(tc);
             }
         }
@@ -65,10 +62,4 @@ public class HourlyClassification implements PaymentClassification {
         return straightTime * hourlyRate + overtime * hourlyRate * 1.5;
     }
 
-    private boolean isInPayPeriod(TimeCard tc, Date payPeriod) {
-        Date payPeriodEndDate = payPeriod;
-        Date payPeriodStartDate = DateUtils.add(payPeriodEndDate, -5);
-        Date timecardDate = tc.getDate();
-        return isInRange(timecardDate, payPeriodStartDate, payPeriodEndDate);
-    }
 }

@@ -1,6 +1,7 @@
 package com.dp.payroll.affiliation;
 
 import com.dp.payroll.Paycheck;
+import com.dp.payroll.util.DateUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,6 +49,8 @@ public class UnionAffiliation implements Affiliation {
 
     @Override
     public double calculateDeductions(Paycheck pc) {
-        return 0;
+        double res = 0;
+        int fridays = DateUtils.numberOfFridaysInPayPeriod(pc.getPayPeriodStartDate(),pc.getPayPeriodEndDate());
+        return fridays * charge;
     }
 }

@@ -2,7 +2,7 @@ package com.dp.payroll.paymentclassification;
 
 import com.dp.payroll.Paycheck;
 
-public class SalariedClassification implements PaymentClassification {
+public class SalariedClassification extends PaymentClassification {
 
     /**
      * 每月工资

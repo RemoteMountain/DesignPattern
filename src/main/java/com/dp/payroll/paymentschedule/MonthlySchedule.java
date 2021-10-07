@@ -11,6 +11,11 @@ public class MonthlySchedule implements PaymentSchedule {
 
     }
 
+    @Override
+    public Date getPayPeriodStartDate(Date payDate) {
+        return null;
+    }
+
     private boolean isLastDayOfMonth(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);

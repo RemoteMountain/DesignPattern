@@ -1,6 +1,7 @@
 package com.dp.payroll;
 
 import com.dp.payroll.affiliation.Affiliation;
+import com.dp.payroll.affiliation.NoAffiliation;
 import com.dp.payroll.paymentclassification.PaymentClassification;
 import com.dp.payroll.paymentmethod.PaymentMethod;
 import com.dp.payroll.paymentschedule.PaymentSchedule;
@@ -24,6 +25,7 @@ public class Employee {
         setEmpId(empId);
         setName(name);
         setAddress(address);
+        setAffiliation(new NoAffiliation());
     }
 
     public int getEmpId() {
@@ -102,5 +104,11 @@ public class Employee {
         pc.setDeductions(deductions);
         pc.setNetPay(netPay);
         method.pay(pc);
+    }
+
+
+
+    public Date getPayPeriodStartDate(Date payDate) {
+        return schedule.getPayPeriodStartDate(payDate);
     }
 }

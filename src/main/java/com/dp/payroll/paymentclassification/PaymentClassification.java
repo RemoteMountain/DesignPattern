@@ -1,7 +1,13 @@
 package com.dp.payroll.paymentclassification;
 
 import com.dp.payroll.Paycheck;
+import com.dp.payroll.util.DateUtils;
 
-public interface PaymentClassification {
-    double calculatePay(Paycheck pc);
+import java.util.Date;
+
+public abstract class PaymentClassification {
+
+    public abstract double calculatePay(Paycheck pc);
+
+
 }

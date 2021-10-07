@@ -12,4 +12,9 @@ public class WeeklySchedule implements PaymentSchedule {
         return calendar.get(Calendar.DAY_OF_WEEK) == 6;
     }
 
+    @Override
+    public Date getPayPeriodStartDate(Date payDate) {
+        return null;
+    }
+
 }

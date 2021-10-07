@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class PaydayTransaction implements Transaction {
     private PayrollDatabase gPayrollDatabase = PayrollDatabase.getpayRollDBInstance();
-    private Map<Integer,Paycheck> paychecks;
+    private Map<Integer, Paycheck> paychecks;
 
 
     private Date payDate;
@@ -29,10 +29,10 @@ public class PaydayTransaction implements Transaction {
     @Override
     public void execute() {
         List<Employee> emps = gPayrollDatabase.getAllEmployee();
-        for (Employee emp: emps) {
-            if (emp.isPayDate(payDate)){
-                Paycheck pc = new Paycheck(payDate);
-                paychecks.put(emp.getEmpId(),pc);
+        for (Employee emp : emps) {
+            if (emp.isPayDate(payDate)) {
+                Paycheck pc = new Paycheck(emp.getPayPeriodStartDate(payDate), payDate);
+                paychecks.put(emp.getEmpId(), pc);
                 emp.payDay(pc);
             }
 

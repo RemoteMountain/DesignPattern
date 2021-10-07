@@ -12,7 +12,7 @@ public class DateUtils {
         return calendar.getTime();
     }
 
-    public static boolean isInRange(Date date, Date startDate, Date endDate) {
+    public static boolean isInPayPeriod(Date date, Date startDate, Date endDate) {
         if (date.getTime() == startDate.getTime() ||
                 date.getTime() == endDate.getTime()) {
             return true;
@@ -32,5 +32,9 @@ public class DateUtils {
         } else {
             return false;
         }
+    }
+
+    public static int numberOfFridaysInPayPeriod(Date startDate, Date endDate) {
+        return 1;
     }
 }
