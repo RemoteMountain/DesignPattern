@@ -12,4 +12,8 @@ public class VirtualWalletBo {
     private Long id;
     private Long createTime;
     private BigDecimal balance;
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
 }

@@ -1,5 +1,7 @@
 package com.dp.virtualWallet.mvc.repository;
 
+import com.dp.virtualWallet.mvc.common.TransactionType;
+
 import java.math.BigDecimal;
 
 /**
@@ -12,9 +14,11 @@ public class VirtualWalletTransactionEntity {
     private Long walletId;
     private BigDecimal amount;
     private Long createTime;
+    //出账钱包账号
     private Long fromWalletId;
+    //入账钱包账号
     private Long toWalletId;
-    private Status status;
+    private TransactionType type;
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
@@ -32,7 +36,7 @@ public class VirtualWalletTransactionEntity {
         this.toWalletId = toWalletId;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setType(TransactionType type) {
+        this.type = type;
     }
 }

@@ -1,4 +1,4 @@
-package com.dp.virtualWallet.mvc.repository;
+package com.dp.virtualWallet.mvc.common;
 
 /**
  * @Description :   //描述

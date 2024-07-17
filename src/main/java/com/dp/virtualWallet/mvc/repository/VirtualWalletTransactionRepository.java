@@ -1,5 +1,7 @@
 package com.dp.virtualWallet.mvc.repository;
 
+import com.dp.virtualWallet.mvc.common.Status;
+
 /**
  * @Description :   //描述
  * @Author : Liwang  //作者
