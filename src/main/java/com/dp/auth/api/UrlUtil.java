@@ -56,7 +56,6 @@ public class UrlUtil {
             String[] keyValue = param.split("=");
             String key = keyValue[0];
             String value = keyValue[1];
-            String domain = urlParts[0];
             if (!"appId".equals(key) && !"token".equals(key) && !"timestamp".equals(key)) {
                 urlParms += key + "=" + value + "&";
             }
