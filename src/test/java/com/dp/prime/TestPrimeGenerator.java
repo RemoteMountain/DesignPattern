@@ -1,4 +1,4 @@
-package com.dp.test.prime;
+package com.dp.prime;
 
 
 import com.dp.prime.PrimeGenerator;

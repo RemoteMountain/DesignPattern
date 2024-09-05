@@ -1,4 +1,4 @@
-package com.dp.test.bowling;
+package com.dp.bowling;
 
 import junit.framework.TestCase;
 

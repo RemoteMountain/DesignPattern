@@ -1,4 +1,4 @@
-package com.dp.test.payroll;
+package com.dp.payroll;
 
 import com.dp.payroll.Employee;
 import com.dp.payroll.Paycheck;
