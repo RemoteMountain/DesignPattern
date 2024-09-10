@@ -170,3 +170,28 @@ https://time.geekbang.org/column/intro/100039001?tab=catalog
 3. 将统计数据显示到终端（命令行或邮件）；
 4. 定时触发以上 3 个过程的执行。
 
+### v2版本
+
+在v1版本的基础上，将性能计数器划分为几个部分，但是其中存在一些问题：
+
+1. Aggregator 类代码有点多，当需要新增或修改统计方式，会不断增加代码，影响代码可读性和可维护性
+2. ConsoleReporter 类、EmailReporter 类 存在代码重复问题：拉取一段时间的数据，调用Aggregator 类获取统计数据，这部分逻辑需要合并，不然违反了DRY原则
+3. ConsoleReporter 类、EmailReporter 类 既有统计逻辑也有显示逻辑，特别是EmailReporter
+   类，组装成xml比较复杂。因此需要将统计逻辑和显示逻辑分离，这样违反了SRP原则
+4. ConsoleReporter 类、EmailReporter 类的代码中设计线程操作，并且调用Aggregator 类的静态函数，代码可测试性不高
+
+#### 针对V1的重构
+
+Aggregator 类和 ConsoleReporter、EmailReporter 类主要负责统计显示的工作。
+如果我们把统计显示所要完成的功能逻辑细分一下，主要包含下面 4 点：
+
+1. 根据给定的时间区间，从数据库中拉取数据；
+2. 根据原始数据，计算得到统计数据；
+3. 将统计数据显示到终端（命令行或邮件）；
+4. 定时触发以上三个过程的执行。
+
+具体的重构工作：
+
+1. 根据给定时间区间，从数据库中拉取数据。这部分逻辑已经被封装在 MetricsStorage 类中了，所以这部分不需要处理。
+2. 根据原始数据，计算得到统计数据。我们可以将这部分逻辑移动到 Aggregator 类中。这样 Aggregator 类就不仅仅是只包含统计方法的工具类了。
+3. 将统计数据显示到终端。我们将这部分逻辑剥离出来，设计成两个类：ConsoleViewer 类和 EmailViewer 类，分别负责将统计结果显示到命令行和邮件中。

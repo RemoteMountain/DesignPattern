@@ -9,11 +9,11 @@ import lombok.Data;
  */
 @Data
 public class RequestStat {
-    private long maxResponseTime;
-    private long minResponseTime;
-    private long avgResponseTime;
-    private long p999ResponseTime;
-    private long p99ResponseTime;
+    private double maxResponseTime;
+    private double minResponseTime;
+    private double avgResponseTime;
+    private double p999ResponseTime;
+    private double p99ResponseTime;
     private long count;
     private long tps;
 }

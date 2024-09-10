@@ -12,17 +12,17 @@ import java.util.List;
  */
 public class Aggregator {
 
-    public static RequestStat aggregate(List<RequestInfo> requestInfos, long durationInSeconds) {
-        long maxRespTime = Long.MIN_VALUE;
-        long minRespTime = Long.MAX_VALUE;
-        long avgRespTime = -1;
-        long p999RespTime = -1;
-        long p99RespTime = -1;
+    public static RequestStat aggregate(List<RequestInfo> requestInfos, long durationInMillis) {
+        double maxRespTime = Double.MIN_VALUE;
+        double minRespTime = Double.MAX_VALUE;
+        double avgRespTime = -1;
+        double p999RespTime = -1;
+        double p99RespTime = -1;
         long sumRespTime = 0;
         long count = 0;
         for (RequestInfo requestInfo : requestInfos) {
             ++count;
-            long respTime = requestInfo.getResponseTime();
+            double respTime = requestInfo.getResponseTime();
             if (maxRespTime < respTime) {
                 maxRespTime = respTime;
             }
@@ -34,7 +34,7 @@ public class Aggregator {
         if (count != 0) {
             avgRespTime = sumRespTime / count;
         }
-        long tps = count / durationInSeconds * 1000;
+        long tps = count / (durationInMillis * 1000);
         Collections.sort(requestInfos, (o1, o2) -> {
             double diff = o1.getResponseTime() - o2.getResponseTime();
             if (diff < 0.0) {

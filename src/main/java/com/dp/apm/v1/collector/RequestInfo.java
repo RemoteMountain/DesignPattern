@@ -11,6 +11,6 @@ import lombok.Data;
 public class RequestInfo {
 
     private String apiName;
-    private Long timestamp;
-    private Long responseTime;
+    private long timestamp;
+    private double responseTime;
 }
