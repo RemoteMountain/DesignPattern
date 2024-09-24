@@ -10,7 +10,7 @@ import java.util.concurrent.Executors;
 
 /**
  * @author LiWang
- * @description: TODO
+ * @description: 指标收集器
  * @date 2024/8/2 11:26
  */
 public class MetricsCollector {

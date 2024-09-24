@@ -12,4 +12,9 @@ public class WebViewer implements StatViewer {
     public void output(Map requestStats, long startTimeInMillis, long endTimeInMills) {
 
     }
+
+    @Override
+    public void output(String statInfo, long startTimeInMillis, long endTimeInMills) {
+
+    }
 }

@@ -8,13 +8,13 @@ import java.util.Map;
 
 /**
  * @author LiWang
- * @description: TODO
+ * @description: 邮件显示
  * @date 2024/9/10 17:17
  */
 public class EmailViewer implements StatViewer {
 
     private EmailSender emailSender;
-    private List toAddresses = new ArrayList<>();
+    private List<String> toAddresses = new ArrayList<>();
 
     public EmailViewer() {
         this.emailSender = new EmailSender(/*省略参数*/);

@@ -15,7 +15,7 @@ import java.util.Map;
 
 /**
  * @author LiWang
- * @description: TODO
+ * @description: 可调度的性能数据统计和上报
  * @date 2024/9/20 13:58
  */
 public class ScheduledReporter {
@@ -77,8 +77,8 @@ public class ScheduledReporter {
         }
     }
 
-    private Map aggregateStats(Map<String, List<RequestStat>> segmentStats, long durationInMillis) {
-        Map aggregatedStats = new HashMap<>();
+    private Map<String, RequestStat> aggregateStats(Map<String, List<RequestStat>> segmentStats, long durationInMillis) {
+        Map<String, RequestStat> aggregatedStats = new HashMap<>();
         for (Map.Entry<String, List<RequestStat>> entry : segmentStats.entrySet()) {
             String apiName = entry.getKey();
             List<RequestStat> apiStats = entry.getValue();
