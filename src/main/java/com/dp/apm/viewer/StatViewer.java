@@ -1,4 +1,4 @@
-package com.dp.apm.v2.viewer;
+package com.dp.apm.viewer;
 
 import java.util.Map;
 
@@ -10,4 +10,6 @@ import java.util.Map;
 public interface StatViewer {
 
     void output(Map requestStats, long startTimeInMillis, long endTimeInMills);
+
+    void output(String statInfo, long startTimeInMillis, long endTimeInMills);
 }

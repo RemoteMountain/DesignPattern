@@ -195,3 +195,9 @@ Aggregator 类和 ConsoleReporter、EmailReporter 类主要负责统计显示的
 1. 根据给定时间区间，从数据库中拉取数据。这部分逻辑已经被封装在 MetricsStorage 类中了，所以这部分不需要处理。
 2. 根据原始数据，计算得到统计数据。我们可以将这部分逻辑移动到 Aggregator 类中。这样 Aggregator 类就不仅仅是只包含统计方法的工具类了。
 3. 将统计数据显示到终端。我们将这部分逻辑剥离出来，设计成两个类：ConsoleViewer 类和 EmailViewer 类，分别负责将统计结果显示到命令行和邮件中。
+
+#### v2重构后的问题
+
+1. EmailReporter类和ConsoleReporter仍然存在代码重复问题，且都用使用到多线程，因而代码可测试性不好
+2. 框架易用性不高，创建EmailReporter类和ConsoleReporter过程比较复杂
+

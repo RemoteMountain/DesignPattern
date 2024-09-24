@@ -1,4 +1,4 @@
-package com.dp.apm.v1.collector;
+package com.dp.apm.collector;
 
 import lombok.Data;
 
@@ -13,4 +13,10 @@ public class RequestInfo {
     private String apiName;
     private long timestamp;
     private double responseTime;
+
+    public RequestInfo(String apiName, long timestamp, double responseTime) {
+        this.apiName = apiName;
+        this.timestamp = timestamp;
+        this.responseTime = responseTime;
+    }
 }

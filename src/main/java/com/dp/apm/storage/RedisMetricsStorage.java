@@ -1,7 +1,7 @@
-package com.dp.apm.v1.storage;
+package com.dp.apm.storage;
 
 
-import com.dp.apm.v1.collector.RequestInfo;
+import com.dp.apm.collector.RequestInfo;
 
 import java.util.List;
 import java.util.Map;

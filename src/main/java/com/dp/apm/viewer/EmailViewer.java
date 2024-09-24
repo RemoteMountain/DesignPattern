@@ -1,6 +1,6 @@
-package com.dp.apm.v2.viewer;
+package com.dp.apm.viewer;
 
-import com.dp.apm.v1.report.EmailSender;
+import com.dp.apm.sender.EmailSender;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +30,11 @@ public class EmailViewer implements StatViewer {
 
     @Override
     public void output(Map requestStats, long startTimeInMillis, long endTimeInMills) {
+
+    }
+
+    @Override
+    public void output(String statInfo, long startTimeInMillis, long endTimeInMills) {
 
     }
 }

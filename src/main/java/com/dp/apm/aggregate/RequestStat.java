@@ -1,4 +1,4 @@
-package com.dp.apm.v1.aggregate;
+package com.dp.apm.aggregate;
 
 import lombok.Data;
 

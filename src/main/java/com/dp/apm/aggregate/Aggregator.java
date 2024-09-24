@@ -1,7 +1,6 @@
-package com.dp.apm.v2.aggregate;
+package com.dp.apm.aggregate;
 
-import com.dp.apm.v1.aggregate.RequestStat;
-import com.dp.apm.v1.collector.RequestInfo;
+import com.dp.apm.collector.RequestInfo;
 
 import java.util.*;
 
