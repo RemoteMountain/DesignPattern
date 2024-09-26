@@ -5,7 +5,7 @@ package com.dp.idgenerator;
  * @description: id生成错误异常
  * @date 2024/9/5 18:00
  */
-public class IdGenerationFailureException extends RuntimeException{
+public class IdGenerationFailureException extends RuntimeException {
 
     public IdGenerationFailureException(String message) {
         super(message);
