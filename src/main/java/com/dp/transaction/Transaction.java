@@ -107,6 +107,6 @@ public class Transaction {
     @VisibleForTesting
     protected boolean isExpired() {
         long executionInvokedTimestamp = System.currentTimeMillis();
-        return executionInvokedTimestamp - createTimestamp > 14 * 24 * 60 * 60 * 1000;
+        return (executionInvokedTimestamp - createTimestamp) > 14 * 24 * 60 * 60 * 1000;
     }
 }
